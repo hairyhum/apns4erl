@@ -233,13 +233,13 @@ handle_info({ssl_closed, SslSocket},
   if
     is_function(ErrorFun) ->
       case ErrorFun(SslSocket) of
-        stop -> throw({stop, connection_closed, State});
-        _ -> ok
+        stop -> {stop, connection_closed, State};
+        _ -> {noreply, State#state{out_socket = undefined}}
       end;
     true ->
-      error_logger:info_msg("APNS disconnected~n")
-  end,
-  {noreply, State#state{out_socket=undefined}};
+      error_logger:info_msg("APNS disconnected~n"),
+      {noreply, State#state{out_socket = undefined}}
+  end;
 
 handle_info(Request, State) ->
   {stop, {unknown_request, Request}, State}.
