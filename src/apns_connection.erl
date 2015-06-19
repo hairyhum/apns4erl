@@ -93,7 +93,7 @@ open_out(Connection) ->
   case ssl:connect(
     Connection#apns_connection.apple_host,
     Connection#apns_connection.apple_port,
-    RealSslOpts,
+    [{versions,['tlsv1.1']} | RealSslOpts],
     Connection#apns_connection.timeout
   ) of
     {ok, OutSocket} -> {ok, OutSocket};
@@ -117,7 +117,7 @@ open_feedback(Connection) ->
   case ssl:connect(
     Connection#apns_connection.feedback_host,
     Connection#apns_connection.feedback_port,
-    RealSslOpts,
+    [{versions,['tlsv1.1']} | RealSslOpts],
     Connection#apns_connection.timeout
   ) of
     {ok, InSocket} -> {ok, InSocket};
